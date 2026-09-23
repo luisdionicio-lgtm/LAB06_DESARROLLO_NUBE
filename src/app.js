@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 const { probarConexion, pool } = require('./config/db');
@@ -20,19 +21,8 @@ app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
 app.use(morgan(process.env.NODE_ENV === 'test' ? 'tiny' : 'combined'));
-
-app.get('/', (req, res) => {
-  res.type('html').send(`<!doctype html>
-  <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>SecureDocs API</title><style>
-  :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;font:16px system-ui;background:#07111f;color:#dce8f5;min-height:100vh;display:grid;place-items:center}
-  main{width:min(760px,92vw);padding:48px;border:1px solid #27415e;border-radius:22px;background:linear-gradient(145deg,#0d2036,#0a1727);box-shadow:0 30px 80px #0008}
-  .tag{color:#55d6be;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}h1{font-size:clamp(2.5rem,7vw,5rem);margin:.2em 0}.lead{color:#9fb2c8;font-size:1.15rem;line-height:1.7}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:30px}.card{padding:18px;border-radius:14px;background:#112b46;border:1px solid #234766}.card b{color:#fff;display:block;margin-bottom:6px}code{color:#7ee3cf}
-  </style></head><body><main><div class="tag">Cloud Security Laboratory</div><h1>SecureDocs</h1>
-  <p class="lead">API REST para documentos empresariales con autenticacion JWT, permisos RBAC, politicas ABAC centralizadas y trazabilidad completa.</p>
-  <section class="grid"><div class="card"><b>Estado</b><code>GET /health</code></div><div class="card"><b>Autenticacion</b><code>POST /auth/login</code></div><div class="card"><b>Documentos</b><code>/documentos</code></div></section></main></body></html>`);
-});
+app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use('/docs', express.static(path.join(__dirname, '..', 'docs')));
 
 app.get('/health', async (req, res, next) => {
   try {
@@ -75,4 +65,3 @@ if (require.main === module) {
 }
 
 module.exports = app;
-

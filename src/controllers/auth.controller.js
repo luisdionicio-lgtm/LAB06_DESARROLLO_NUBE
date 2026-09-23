@@ -72,5 +72,8 @@ async function logout(req, res) {
   res.json({ message: 'Sesion cerrada. Descarta el token en el cliente.' });
 }
 
-module.exports = { login, logout };
+async function perfil(req, res) {
+  res.json({ usuario: usuarioRepository.sinPassword(req.usuario) });
+}
 
+module.exports = { login, logout, perfil };

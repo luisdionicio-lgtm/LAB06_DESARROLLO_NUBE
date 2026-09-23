@@ -1,6 +1,6 @@
 # SecureDocs
 
-SecureDocs es una API REST para gestionar documentos internos de TechCorp S.A. Aplica autenticación JWT, permisos basados en roles RBAC, políticas basadas en atributos ABAC y auditoría de decisiones permitidas y denegadas.
+SecureDocs es una aplicación web y API REST para gestionar documentos internos de TechCorp S.A. Aplica autenticación JWT, permisos basados en roles RBAC, políticas basadas en atributos ABAC y auditoría de decisiones permitidas y denegadas.
 
 ## Objetivo
 
@@ -14,6 +14,7 @@ Demostrar que un permiso asignado por rol no es suficiente por sí solo. Una ope
 - Docker Desktop y Docker Compose
 - Postman
 - Pruebas nativas de Node.js
+- Interfaz web responsive en HTML, CSS y JavaScript
 
 ## Arquitectura
 
@@ -32,6 +33,7 @@ securedocs/
 ├── database/                Esquema y datos iniciales
 ├── docs/                    Matrices, diagramas y guías
 ├── scripts/                 Verificación automática de escenarios
+├── public/                  Aplicación web responsive
 ├── src/
 │   ├── config/              Conexión PostgreSQL
 │   ├── controllers/         Casos de uso HTTP
@@ -124,7 +126,7 @@ Los scripts son repetibles: usan `IF NOT EXISTS` y `ON CONFLICT`.
 npm run dev
 ```
 
-La API estará en `http://localhost:3000`. Comprueba `GET http://localhost:3000/health`.
+La aplicación web estará en `http://localhost:3000`. Comprueba `GET http://localhost:3000/health` para validar la API.
 
 ## Ejecución completa con Docker Desktop
 
@@ -138,6 +140,7 @@ docker compose ps
 Servicios:
 
 - API: `http://localhost:3000`
+- Aplicación web: `http://localhost:3000`
 - PostgreSQL del proyecto: `localhost:5433`
 
 Para registrar la base Docker en PgAdmin:
@@ -295,6 +298,7 @@ Las denegaciones se escriben antes de devolver `403`.
 ## Evidencias y demostración
 
 - [Guía de capturas](docs/evidencias.md)
+- [Guía completa para adjuntar evidencias](docs/guia-entrega-evidencias.md)
 - [Guía para el video](docs/guia-video.md)
 
 ## Propuesta de commits progresivos
@@ -320,4 +324,3 @@ docs: agregar Postman arquitectura matrices y README
 ## Conclusiones
 
 SecureDocs separa autenticación, permisos por rol y políticas contextuales. La autorización no depende de condicionales de rol dispersos y cada decisión deja evidencia. La misma solución funciona con PostgreSQL local para desarrollo y con Docker Compose para una entrega reproducible.
-

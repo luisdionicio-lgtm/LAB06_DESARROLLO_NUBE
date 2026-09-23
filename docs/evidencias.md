@@ -17,6 +17,6 @@ Guarda las capturas en una carpeta externa al repositorio o en `docs/evidencias/
 11. Consulta `GET /auditoria` mostrando decisiones permitidas y denegadas.
 12. PgAdmin mostrando las tablas y algunos registros de `auditorias`.
 13. Terminal con `npm test` y `npm run verify`, incluyendo `17 de 17 casos`.
+14. Aplicación web mostrando el panel principal, contexto ABAC, matrices de seguridad y centro de evidencias.
 
 Cada captura debe mostrar método, URL, encabezados relevantes, cuerpo enviado, estado HTTP y respuesta JSON. Evita publicar la contraseña de PostgreSQL, el contenido completo del JWT o el valor de `JWT_SECRET`.
-

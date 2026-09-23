@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SecureDocs, gestión documental segura con RBAC, ABAC y auditoría">
+  <title>SecureDocs | Control documental</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="login-view" class="login-view">
+    <section class="login-story">
+      <div class="brand brand-light"><span class="brand-mark">SD</span><span>SecureDocs</span></div>
+      <div class="story-copy">
+        <p class="eyebrow">Seguridad en la nube</p>
+        <h1>Los documentos correctos.<br>En las manos correctas.</h1>
+        <p>Una plataforma de TechCorp para proteger expedientes internos mediante identidad, contexto y trazabilidad.</p>
+      </div>
+      <div class="security-strip">
+        <span><i></i> JWT</span><span><i></i> RBAC</span><span><i></i> ABAC</span><span><i></i> Auditoría</span>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <form id="login-form" class="login-card">
+        <div class="mobile-brand brand"><span class="brand-mark">SD</span><span>SecureDocs</span></div>
+        <p class="eyebrow">Portal interno</p>
+        <h2>Bienvenido de nuevo</h2>
+        <p class="muted">Ingresa con tu cuenta corporativa para continuar.</p>
+        <label>Correo corporativo
+          <input id="login-email" type="email" autocomplete="username" value="admin@securedocs.com" required>
+        </label>
+        <label>Contraseña
+          <div class="password-field">
+            <input id="login-password" type="password" autocomplete="current-password" value="Demo1234!" required>
+            <button id="toggle-password" type="button" class="icon-button" aria-label="Mostrar contraseña">Ver</button>
+          </div>
+        </label>
+        <button id="login-submit" class="button button-primary button-wide" type="submit">Ingresar de forma segura</button>
+        <p id="login-error" class="form-error" role="alert"></p>
+        <div class="demo-note">
+          <strong>Acceso de demostración</strong>
+          <span>Todos los usuarios usan <code>Demo1234!</code></span>
+        </div>
+      </form>
+      <p class="login-footer">TechCorp S.A. · Laboratorio 06 Cloud Security</p>
+    </section>
+  </div>
+
+  <div id="app-view" class="app-view hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">SD</span><span>SecureDocs</span></div>
+      <nav id="main-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="inicio"><span class="nav-icon">⌂</span>Inicio</button>
+        <button class="nav-item" data-view="documentos"><span class="nav-icon">▤</span>Documentos</button>
+        <button class="nav-item role-admin" data-view="usuarios"><span class="nav-icon">◎</span>Usuarios</button>
+        <button class="nav-item role-audit" data-view="auditoria"><span class="nav-icon">◷</span>Auditoría</button>
+        <button class="nav-item" data-view="seguridad"><span class="nav-icon">◇</span>Seguridad</button>
+        <button class="nav-item" data-view="evidencias"><span class="nav-icon">✓</span>Evidencias</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="system-status"><span class="status-dot"></span><div><strong>Sistema operativo</strong><small>API y PostgreSQL</small></div></div>
+        <button id="logout-button" class="nav-item danger"><span class="nav-icon">↪</span>Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+    <main class="main-content">
+      <header class="topbar">
+        <button id="menu-button" class="menu-button" aria-label="Abrir menú">☰</button>
+        <div>
+          <p class="breadcrumb">TechCorp / <span id="breadcrumb-current">Inicio</span></p>
+          <h2 id="page-title">Panel de seguridad</h2>
+        </div>
+        <div class="topbar-actions">
+          <button id="context-button" class="context-button" title="Configurar contexto ABAC">
+            <span class="context-icon">◎</span><span><small>Contexto ABAC</small><strong id="context-summary">PERU · CORPORATIVO</strong></span>
+          </button>
+          <div class="profile">
+            <span id="profile-avatar" class="avatar">AD</span>
+            <div><strong id="profile-name">Administrador</strong><small id="profile-role">ADMINISTRADOR</small></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-body">
+        <section id="view-inicio" class="view active">
+          <div class="hero-card">
+            <div>
+              <p class="eyebrow">Acceso verificado</p>
+              <h1 id="welcome-title">Buenos días</h1>
+              <p id="welcome-copy">Tu sesión está protegida por autenticación JWT y autorización contextual.</p>
+            </div>
+            <div class="hero-shield"><span>✓</span><small>Sesión segura</small></div>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric-card"><div class="metric-icon blue">▤</div><div><span>Documentos visibles</span><strong id="metric-documents">—</strong><small>Según tu autorización</small></div></article>
+            <article class="metric-card"><div class="metric-icon green">✓</div><div><span>Accesos permitidos</span><strong id="metric-allowed">—</strong><small>Últimos registros</small></div></article>
+            <article class="metric-card"><div class="metric-icon amber">!</div><div><span>Accesos denegados</span><strong id="metric-denied">—</strong><small>Protegidos por políticas</small></div></article>
+            <article class="metric-card"><div class="metric-icon violet">◎</div><div><span>Usuarios</span><strong id="metric-users">—</strong><small id="metric-users-copy">Acceso según rol</small></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel">
+              <div class="panel-header"><div><p class="eyebrow">Actividad</p><h3>Documentos recientes</h3></div><button class="text-button" data-go="documentos">Ver todos →</button></div>
+              <div id="recent-documents" class="document-list loading-block">Cargando documentos…</div>
+            </article>
+            <article class="panel security-panel">
+              <div class="panel-header"><div><p class="eyebrow">Decisión de acceso</p><h3>Cadena de seguridad</h3></div></div>
+              <ol class="security-flow">
+                <li class="done"><span>1</span><div><strong>Autenticación JWT</strong><small>Identidad confirmada</small></div></li>
+                <li class="done"><span>2</span><div><strong>Permisos RBAC</strong><small id="rbac-summary">Rol cargado</small></div></li>
+                <li class="done"><span>3</span><div><strong>Políticas ABAC</strong><small>Usuario + recurso + entorno</small></div></li>
+                <li class="done"><span>4</span><div><strong>Auditoría</strong><small>Cada decisión deja evidencia</small></div></li>
+              </ol>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-documentos" class="view">
+          <div class="section-heading">
+            <div><p class="eyebrow">Recursos protegidos</p><h1>Documentos</h1><p>Solo se muestran los recursos permitidos por RBAC y ABAC.</p></div>
+            <button id="new-document-button" class="button button-primary">+ Nuevo documento</button>
+          </div>
+          <div class="toolbar">
+            <div class="search-field"><span>⌕</span><input id="document-search" type="search" placeholder="Buscar por título, área o propietario"></div>
+            <select id="document-level-filter" aria-label="Filtrar por nivel"><option value="">Todos los niveles</option><option value="1">Nivel 1</option><option value="2">Nivel 2</option><option value="3">Nivel 3</option><option value="4">Nivel 4</option><option value="5">Nivel 5</option></select>
+            <select id="document-status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option>PENDIENTE</option><option>APROBADO</option><option>PUBLICADO</option><option>ARCHIVADO</option></select>
+            <button id="refresh-documents" class="button button-secondary">Actualizar</button>
+          </div>
+          <div class="table-shell"><table><thead><tr><th>Documento</th><th>Área</th><th>Nivel</th><th>Estado</th><th>Propietario</th><th class="actions-column">Acciones</th></tr></thead><tbody id="documents-table"></tbody></table></div>
+          <div id="documents-empty" class="empty-state hidden"><span>▤</span><h3>No hay documentos visibles</h3><p>Revisa el contexto ABAC o crea un nuevo documento.</p></div>
+        </section>
+
+        <section id="view-usuarios" class="view">
+          <div class="section-heading">
+            <div><p class="eyebrow">Administración</p><h1>Usuarios y acceso</h1><p>Gestiona identidad, rol, departamento y nivel de seguridad.</p></div>
+            <button id="new-user-button" class="button button-primary">+ Nuevo usuario</button>
+          </div>
+          <div class="toolbar"><div class="search-field"><span>⌕</span><input id="user-search" type="search" placeholder="Buscar por nombre, correo, rol o área"></div><button id="refresh-users" class="button button-secondary">Actualizar</button></div>
+          <div class="table-shell"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Departamento</th><th>Nivel</th><th>Contrato</th><th>Estado</th><th class="actions-column">Acciones</th></tr></thead><tbody id="users-table"></tbody></table></div>
+        </section>
+
+        <section id="view-auditoria" class="view">
+          <div class="section-heading"><div><p class="eyebrow">Trazabilidad</p><h1>Registro de auditoría</h1><p>Decisiones permitidas y denegadas con su causa y contexto.</p></div><button id="refresh-audit" class="button button-primary">Actualizar registro</button></div>
+          <div class="audit-summary"><div><span class="status-dot"></span><strong>Registro inmutable de decisiones</strong><small>La auditoría se escribe antes de responder una denegación.</small></div><select id="audit-result-filter"><option value="">Todos los resultados</option><option value="PERMITIDO">Permitidos</option><option value="DENEGADO">Denegados</option></select></div>
+          <div class="table-shell"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Acción y recurso</th><th>Decisión</th><th>Motivo</th><th>Contexto</th></tr></thead><tbody id="audit-table"></tbody></table></div>
+        </section>
+
+        <section id="view-seguridad" class="view">
+          <div class="section-heading"><div><p class="eyebrow">Gobierno de acceso</p><h1>Modelo de seguridad</h1><p>Una autorización requiere permiso RBAC y cumplimiento ABAC.</p></div></div>
+          <div class="formula"><span>RBAC</span><b>+</b><span>ABAC</span><b>=</b><strong>ACCESO</strong></div>
+          <article class="panel spaced"><div class="panel-header"><div><p class="eyebrow">Matriz de permisos</p><h3>Role Based Access Control</h3></div></div><div class="table-shell flush"><table class="matrix-table"><thead><tr><th>Operación</th><th>Admin</th><th>Gerente</th><th>Supervisor</th><th>Empleado</th><th>Auditor</th><th>Invitado</th></tr></thead><tbody id="rbac-matrix"></tbody></table></div></article>
+          <article class="panel spaced"><div class="panel-header"><div><p class="eyebrow">Motor contextual</p><h3>Ocho políticas ABAC</h3></div></div><div id="policy-grid" class="policy-grid"></div></article>
+        </section>
+
+        <section id="view-evidencias" class="view">
+          <div class="section-heading"><div><p class="eyebrow">Entrega académica</p><h1>Centro de evidencias</h1><p>Lista de control para demostrar cada requisito del laboratorio.</p></div><button id="print-evidence" class="button button-primary">Imprimir guía</button></div>
+          <div class="evidence-layout">
+            <article class="panel"><div class="panel-header"><div><p class="eyebrow">Capturas</p><h3>Evidencias obligatorias</h3></div><span class="counter">14 pasos</span></div><div id="evidence-checklist" class="checklist"></div></article>
+            <aside class="panel evidence-aside"><p class="eyebrow">Antes de entregar</p><h3>Checklist final</h3><ul><li>Contenedores saludables</li><li>17 casos ejecutados</li><li>Auditoría visible</li><li>Repositorio actualizado</li><li>Video de demostración</li></ul><div class="evidence-tip"><strong>Importante</strong><p>No muestres `.env`, `JWT_SECRET`, la contraseña de PostgreSQL ni el token completo.</p></div><a class="button button-secondary button-wide" href="/docs/guia-entrega-evidencias.md" target="_blank">Abrir guía completa</a></aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="context-dialog" class="modal compact-modal">
+    <form method="dialog" id="context-form">
+      <div class="modal-header"><div><p class="eyebrow">Simulador ABAC</p><h2>Contexto de solicitud</h2></div><button id="context-close" type="button" class="modal-close" aria-label="Cerrar">×</button></div>
+      <p class="muted">Estos atributos se envían en cada petición para evaluar país, dispositivo y horario.</p>
+      <div class="form-grid"><label>Ubicación<select id="context-location"><option>PERU</option><option>CHILE</option><option>COLOMBIA</option><option>ECUADOR</option></select></label><label>Dispositivo<select id="context-device"><option>CORPORATIVO</option><option>PERSONAL</option></select></label><label class="span-2">Hora de prueba<input id="context-time" type="time"><small>Déjalo vacío para usar la hora real de Lima.</small></label></div>
+      <div class="modal-actions"><button id="context-cancel" type="button" class="button button-secondary">Cancelar</button><button id="save-context" class="button button-primary" type="submit">Aplicar contexto</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="form-dialog" class="modal">
+    <form id="entity-form">
+      <div class="modal-header"><div><p id="form-eyebrow" class="eyebrow">Nuevo recurso</p><h2 id="form-title">Crear</h2></div><button id="form-close" type="button" class="modal-close" aria-label="Cerrar">×</button></div>
+      <div id="form-content" class="form-grid"></div>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="modal-actions"><button id="form-cancel" type="button" class="button button-secondary">Cancelar</button><button id="form-submit" type="submit" class="button button-primary">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="modal compact-modal">
+    <form method="dialog"><div class="confirm-icon">!</div><h2 id="confirm-title">Confirmar acción</h2><p id="confirm-copy" class="muted"></p><div class="modal-actions"><button class="button button-secondary" value="cancel">Cancelar</button><button id="confirm-action" class="button button-danger" value="confirm">Confirmar</button></div></form>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
