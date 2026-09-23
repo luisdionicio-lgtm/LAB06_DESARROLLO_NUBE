@@ -1,0 +1,166 @@
+{
+  "info": {
+    "name": "SecureDocs - Laboratorio 06",
+    "description": "Coleccion para autenticacion, usuarios, documentos, auditoria y los 17 casos RBAC/ABAC. Ejecutar sobre una base recien inicializada.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "password_demo", "value": "Demo1234!" },
+    { "key": "token_admin", "value": "" },
+    { "key": "token_gerente", "value": "" },
+    { "key": "token_supervisor", "value": "" },
+    { "key": "token_empleado", "value": "" },
+    { "key": "token_auditor", "value": "" },
+    { "key": "token_invitado", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01 Autenticacion",
+      "item": [
+        {
+          "name": "Login administrador",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_admin', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"admin@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Login gerente",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_gerente', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"gerente@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Login supervisor",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_supervisor', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"supervisor@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Login empleado",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_empleado', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"empleado@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Login auditor",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_auditor', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"auditor@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Login invitado",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Login correcto', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token_invitado', pm.response.json().token);"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"invitado@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        }
+      ]
+    },
+    {
+      "name": "02 Gestion de usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }], "url": "{{base_url}}/usuarios" }
+        },
+        {
+          "name": "Crear usuario",
+          "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Usuario Postman\",\n  \"correo\": \"postman@securedocs.com\",\n  \"password\": \"Demo1234!\",\n  \"rol\": \"EMPLEADO\",\n  \"departamento\": \"SISTEMAS\",\n  \"nivel_seguridad\": 2,\n  \"pais\": \"PERU\",\n  \"tipo_contrato\": \"INTERNO\",\n  \"estado\": \"ACTIVO\"\n}" }, "url": "{{base_url}}/usuarios" }
+        },
+        {
+          "name": "Modificar usuario",
+          "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"nivel_seguridad\": 3,\n  \"departamento\": \"LEGAL\"\n}" }, "url": "{{base_url}}/usuarios/7" }
+        },
+        {
+          "name": "Cambiar estado",
+          "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{ \"estado\": \"ACTIVO\" }" }, "url": "{{base_url}}/usuarios/7/estado" }
+        }
+      ]
+    },
+    {
+      "name": "03 Casos obligatorios y adicionales",
+      "item": [
+        {
+          "name": "Caso 01 - Empleado consulta documento de su area",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_empleado}}" }, { "key": "x-ubicacion", "value": "PERU" }, { "key": "x-dispositivo", "value": "CORPORATIVO" }, { "key": "x-hora-prueba", "value": "10:00" }], "url": "{{base_url}}/documentos/2" }
+        },
+        {
+          "name": "Caso 02 - Empleado consulta documento de otra area",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por ABAC', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().tipo).to.eql('ABAC'); });"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_empleado}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/3" }
+        },
+        {
+          "name": "Caso 03 - Supervisor aprueba documento de su area",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token_supervisor}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/2/aprobar" }
+        },
+        {
+          "name": "Caso 04 - Empleado intenta aprobar documento",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por RBAC', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().tipo).to.eql('RBAC'); });"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token_empleado}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/2/aprobar" }
+        },
+        {
+          "name": "Caso 05 - Nivel 2 consulta documento nivel 4",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Nivel insuficiente', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().politica).to.eql('NIVEL_SEGURIDAD'); });"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_empleado}}" }, { "key": "x-ubicacion", "value": "PERU" }, { "key": "x-dispositivo", "value": "CORPORATIVO" }, { "key": "x-hora-prueba", "value": "10:00" }], "url": "{{base_url}}/documentos/4" }
+        },
+        {
+          "name": "Caso 06 - Gerente elimina documento",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{token_gerente}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/8" }
+        },
+        {
+          "name": "Caso 07 - Auditor intenta modificar documento",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por RBAC', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().tipo).to.eql('RBAC'); });"] } }],
+          "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{token_auditor}}" }, { "key": "Content-Type", "value": "application/json" }, { "key": "x-ubicacion", "value": "PERU" }], "body": { "mode": "raw", "raw": "{ \"titulo\": \"Cambio no permitido\" }" }, "url": "{{base_url}}/documentos/1" }
+        },
+        {
+          "name": "Caso 08 - Usuario inactivo intenta acceder",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado', () => pm.response.to.have.status(403));"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"correo\": \"inactivo@securedocs.com\",\n  \"password\": \"{{password_demo}}\"\n}" }, "url": "{{base_url}}/auth/login" }
+        },
+        {
+          "name": "Caso 09 - Confidencial fuera del horario",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por horario', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().politica).to.eql('HORARIO'); });"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "x-ubicacion", "value": "PERU" }, { "key": "x-dispositivo", "value": "CORPORATIVO" }, { "key": "x-hora-prueba", "value": "20:00" }], "url": "{{base_url}}/documentos/4" }
+        },
+        {
+          "name": "Caso 10 - Nivel 5 desde dispositivo personal",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por dispositivo', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().politica).to.eql('DISPOSITIVO'); });"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "x-ubicacion", "value": "PERU" }, { "key": "x-dispositivo", "value": "PERSONAL" }, { "key": "x-hora-prueba", "value": "10:00" }], "url": "{{base_url}}/documentos/5" }
+        },
+        {
+          "name": "Caso 11 - Invitado accede a documento publico",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_invitado}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/1" }
+        },
+        {
+          "name": "Caso 12 - Invitado accede a confidencial",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado', () => pm.response.to.have.status(403));"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_invitado}}" }, { "key": "x-ubicacion", "value": "PERU" }, { "key": "x-dispositivo", "value": "CORPORATIVO" }, { "key": "x-hora-prueba", "value": "10:00" }], "url": "{{base_url}}/documentos/4" }
+        },
+        {
+          "name": "Caso 13 - Administrador crea documento",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Creado', () => pm.response.to.have.status(201));"] } }],
+          "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "Content-Type", "value": "application/json" }, { "key": "x-ubicacion", "value": "PERU" }], "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Documento del administrador\",\n  \"descripcion\": \"Caso adicional 13\",\n  \"departamento\": \"LEGAL\",\n  \"nivel_confidencialidad\": 5,\n  \"pais\": \"PERU\"\n}" }, "url": "{{base_url}}/documentos" }
+        },
+        {
+          "name": "Caso 14 - Empleado modifica documento ajeno",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por propiedad', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().politica).to.eql('PROPIEDAD'); });"] } }],
+          "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{token_empleado}}" }, { "key": "Content-Type", "value": "application/json" }, { "key": "x-ubicacion", "value": "PERU" }], "body": { "mode": "raw", "raw": "{ \"titulo\": \"Intento de cambio\" }" }, "url": "{{base_url}}/documentos/7" }
+        },
+        {
+          "name": "Caso 15 - Supervisor nivel 4 consulta nivel 3",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_supervisor}}" }, { "key": "x-ubicacion", "value": "PERU" }], "url": "{{base_url}}/documentos/9" }
+        },
+        {
+          "name": "Caso 16 - Usuario Peru consulta documento Chile",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Denegado por pais', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().politica).to.eql('PAIS'); });"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }, { "key": "x-ubicacion", "value": "CHILE" }], "url": "{{base_url}}/documentos/6" }
+        },
+        {
+          "name": "Caso 17 - Auditor consulta auditoria",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Permitido', () => pm.response.to.have.status(200));"] } }],
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token_auditor}}" }], "url": "{{base_url}}/auditoria?limite=100" }
+        }
+      ]
+    }
+  ]
+}
+
